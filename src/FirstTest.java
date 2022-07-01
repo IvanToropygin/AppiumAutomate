@@ -63,7 +63,7 @@ public class FirstTest {
                 "Cannot find search_close_btn",
                 5);
 
-        waitForElementNotPresentById(
+        waitForElementNotPresent(
                 By.id("org.wikipedia:id/search_close_btn"),
                 "X btn still present on Page",
                 5);
@@ -133,6 +133,30 @@ public class FirstTest {
                 "Text in input field don't compare");
     }
 
+    @Test
+    public void testSearchingArticlesAndCancel(){
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find searchInputOnMainPage",
+                5);
+
+        waitForElementAndSendKeysByXPath(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Appium",
+                "Cannot find searchInputOnSearchPage",
+                5);
+
+        assertElementsMoreThanOne(
+                By.className("android.widget.FrameLayout"),
+                "wrong count articles");
+
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Field don't cleared",
+                5);
+
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutSeconds){
         WebDriverWait wait = new WebDriverWait(driver, timeoutSeconds);
         wait.withMessage(error_message + "\n");
@@ -155,7 +179,7 @@ public class FirstTest {
         return element;
     }
 
-    private boolean waitForElementNotPresentById(By by, String error_message, long timeoutSeconds){
+    private boolean waitForElementNotPresent(By by, String error_message, long timeoutSeconds){
         WebDriverWait wait = new WebDriverWait(driver, timeoutSeconds);
         wait.withMessage(error_message + "\n");
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
@@ -171,5 +195,9 @@ public class FirstTest {
         WebElement element = driver.findElement(by);
         String actualText = element.getAttribute("text");
         Assert.assertEquals(error_message, actualText, expectedText);
+    }
+
+    private void assertElementsMoreThanOne(By by, String error_message){
+       Assert.assertTrue(error_message, driver.findElements(by).size() > 1);
     }
 }
