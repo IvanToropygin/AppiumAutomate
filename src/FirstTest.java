@@ -117,7 +117,7 @@ public class FirstTest {
 
         waitForElementAndClear(
                 By.id("org.wikipedia:id/search_src_text"),
-                "Field dont cleared",
+                "Field don't cleared",
                 5);
     }
 
@@ -129,8 +129,8 @@ public class FirstTest {
                 5);
         assertElementHasText(
                 By.id("org.wikipedia:id/search_src_text"),
-                "Search Wikipedia",
-                "Search title text don't compare");
+                "Search…",
+                "Text in input field don't compare");
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutSeconds){
@@ -167,9 +167,9 @@ public class FirstTest {
         return element;
     }
 
-    private WebElement assertElementHasText(By by, String value, String error_message){
-        WebElement element = waitForElementPresent(by, error_message);
-        element.getAttribute("text");
-        return element;
+    private void assertElementHasText(By by, String expectedText, String error_message){
+        WebElement element = driver.findElement(by);
+        String actualText = element.getAttribute("text");
+        Assert.assertEquals(error_message, actualText, expectedText);
     }
 }
