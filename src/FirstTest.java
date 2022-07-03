@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Locale;
 
 public class FirstTest {
     private AppiumDriver driver;
@@ -39,7 +41,7 @@ public class FirstTest {
                 "Cannot find searchInputOnMainPage",
                 5);
 
-        waitForElementAndSendKeysByXPath(
+        waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 "Java",
                 "Cannot find searchInputOnSearchPage",
@@ -76,7 +78,7 @@ public class FirstTest {
                 "Cannot find searchInputOnMainPage",
                 5);
 
-        waitForElementAndSendKeysByXPath(
+        waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 "Java",
                 "Cannot find searchInputOnSearchPage",
@@ -109,7 +111,7 @@ public class FirstTest {
                 "Cannot find searchInputOnMainPage",
                 5);
 
-        waitForElementAndSendKeysByXPath(
+        waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 "Java",
                 "Cannot find searchInputOnSearchPage",
@@ -140,7 +142,7 @@ public class FirstTest {
                 "Cannot find searchInputOnMainPage",
                 5);
 
-        waitForElementAndSendKeysByXPath(
+        waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 "Appium",
                 "Cannot find searchInputOnSearchPage",
@@ -154,7 +156,26 @@ public class FirstTest {
                 By.id("org.wikipedia:id/search_src_text"),
                 "Field don't cleared",
                 5);
+    }
 
+    @Test
+    public void testArticlesContainsSearchingText(){
+        String search = "Java";
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find searchInputOnMainPage",
+                5);
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search,
+                "Cannot find searchInputOnSearchPage",
+                5);
+
+        assertElementsHasText(
+                By.id("org.wikipedia:id/page_list_item_title"),
+                search);
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutSeconds){
@@ -173,7 +194,7 @@ public class FirstTest {
         return element;
     }
 
-    private WebElement waitForElementAndSendKeysByXPath(By by, String value, String error_message, long timeoutSeconds){
+    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutSeconds){
         WebElement element = waitForElementPresent(by, error_message, timeoutSeconds);
         element.sendKeys(value);
         return element;
@@ -200,4 +221,14 @@ public class FirstTest {
     private void assertElementsMoreThanOne(By by, String error_message){
        Assert.assertTrue(error_message, driver.findElements(by).size() > 1);
     }
+
+    private void assertElementsHasText(By by, String expectedText){
+        List<WebElement> listOfElements = driver.findElements(by);
+        for (int i = 0; i < listOfElements.size(); i++){
+            String actualText = listOfElements.get(i).getAttribute("text").toLowerCase();
+            Assert.assertTrue((i+1) + " - элемент из найденных - " + listOfElements.size() + ": не содержит нужный текст: " + expectedText,
+                    actualText.contains(expectedText.toLowerCase()));
+        }
+    }
+
 }
