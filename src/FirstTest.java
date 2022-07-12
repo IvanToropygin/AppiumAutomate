@@ -422,6 +422,145 @@ public class FirstTest {
                 "Cannot find 'Island' after returning from background");
     }
 
+    @Test
+    public void saveTwoArticlesToMyList(){
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find search Input On Main Page",
+                5);
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search Input On Search Page",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Island')]"),
+                "Cannot find searchInputOnMainPage",
+                5);
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title",
+                15);
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc=\"More options\"]"),
+                "Cannot find button to open article options",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[@text = 'Add to reading list']"),
+                "Connot find option to add article to reading list",
+                5);
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/onboarding_button"),
+                "Cannot find 'GOT IT' tip overlay",
+                5);
+
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/text_input"),
+                "Cannot find input to set list name",
+                5);
+
+        String nameOfList = "HomeWork";
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/text_input"),
+                nameOfList
+                , "Cannot find input to set list name",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[@text = 'OK']"),
+                "Cannot find 'OK' button",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc = \"Navigate up\"]"),
+                "Cannot find X button click",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find search Input On Main Page",
+                5);
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search Input On Search Page",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'High-level')]"),
+                "Cannot find searchInputOnMainPage",
+                5);
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title",
+                20);
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc=\"More options\"]"),
+                "Cannot find button to open article options",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[@text = 'Add to reading list']"),
+                "Connot find option to add article to reading list",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, '" + nameOfList + "')]"),
+                "Cannot find reading list :"+ nameOfList,
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc = \"Navigate up\"]"),
+                "Cannot find X button click",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc=\"My lists\"]"),
+                "Cannot find My list navigation button click",
+                5);
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/item_container"),
+                "Cannot find '" + nameOfList + "' list",
+                15);
+
+        waitForElementPresent(
+                By.xpath("//*[@class = 'android.widget.LinearLayout']//*[contains(@text, 'island')]"),
+                "List not opened");
+
+        swipeElementToLeft(
+                By.xpath("//*[@class = 'android.widget.LinearLayout']//*[contains(@text, 'island')]"),
+                "Cannot left swipe article");
+
+        waitForElementPresent(
+                By.xpath("//*[@class = 'android.widget.LinearLayout']//*[contains(@text, 'high-level')]"),
+                "Cannot find second Article after first Article Deleted deleted");
+
+        String expectedText = "JavaScript";
+        waitForElementAndClick(
+                By.xpath("//*[@text = '" + expectedText + "']"),
+                "Cannot find text 'high-level'"
+                , 15);
+
+        String actualText = waitForElementAndGetAttribute(
+                By.xpath("//*[@text = '" + expectedText + "']"),
+                "text",
+                "Cannot find Article :" + expectedText,
+                5);
+
+        Assert.assertEquals("Article not compare", expectedText, actualText);
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutSeconds){
         WebDriverWait wait = new WebDriverWait(driver, timeoutSeconds);
         wait.withMessage(error_message + "\n");
