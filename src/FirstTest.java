@@ -34,7 +34,10 @@ public class FirstTest {
     }
 
     @After
-    public void tearDown() {driver.quit();}
+    public void tearDown() {
+        driver.quit();
+        driver.rotate(ScreenOrientation.PORTRAIT);
+    }
 
     @Test
     public void firstTest() {
