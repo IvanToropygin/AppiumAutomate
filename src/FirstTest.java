@@ -561,6 +561,29 @@ public class FirstTest {
         Assert.assertEquals("Article not compare", expectedText, actualText);
     }
 
+    @Test
+    public void assertTitle(){
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find search Input On Main Page",
+                5);
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search Input On Search Page",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Island')]"),
+                "Cannot find searchInputOnMainPage",
+                5);
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find 'Java' after click on Title");
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutSeconds){
         WebDriverWait wait = new WebDriverWait(driver, timeoutSeconds);
         wait.withMessage(error_message + "\n");
@@ -676,5 +699,12 @@ public class FirstTest {
     private String waitForElementAndGetAttribute(By by, String attribute, String errorMessage, long timeoutInSeconds){
         WebElement element = waitForElementPresent(by, errorMessage,timeoutInSeconds);
         return element.getAttribute(attribute);
+    }
+
+    private void assertElementPresent(By by, String error_message){
+        if (!driver.findElement(by).isDisplayed()){
+            String defaultMessage = "An element '" + by.toString() + "' supposed tobe present";
+            throw new AssertionError(defaultMessage + "" + error_message);
+        }
     }
 }
