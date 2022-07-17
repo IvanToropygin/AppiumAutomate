@@ -13,7 +13,7 @@ public class MyListTests extends CoreTestCase {
         SearchPageObject searchPageObject = new SearchPageObject(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Island");
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
         ArticlePageObject articlePageObject = new ArticlePageObject(driver);
         articlePageObject.waitForTitleElement();
@@ -30,5 +30,40 @@ public class MyListTests extends CoreTestCase {
         MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
         myListsPageObject.openListByName(nameOfList);
         myListsPageObject.swipeLeftArticleToDelete(articleTitle);
+    }
+
+    @Test
+    public void testSaveTwoArticlesToMyList(){
+        String searchLine = "Java";
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(searchLine);
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        articlePageObject.waitForTitleElement();
+
+        String firstArticleTitle = articlePageObject.getArticleTitle();
+        String nameOfList = "HomeWork";
+
+        articlePageObject.addArticleToNewList(nameOfList);
+        articlePageObject.closeArticle();
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(searchLine);
+        searchPageObject.clickByArticleWithSubstring("High-level");
+        articlePageObject.waitForTitleElement();
+        String secondArticleTitle = articlePageObject.getArticleTitle();
+        articlePageObject.addArticleToExistingList(nameOfList);
+        articlePageObject.closeArticle();
+
+        NavigationUI navigationUI = new NavigationUI(driver);
+        navigationUI.clickMyLists();
+
+        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        myListsPageObject.openListByName(nameOfList);
+        myListsPageObject.swipeLeftArticleToDelete(firstArticleTitle);
+
+        myListsPageObject.waitForArticleToDisappearByTitle(firstArticleTitle);
+        myListsPageObject.waitForArticleToAppearByTitle(secondArticleTitle);
     }
 }

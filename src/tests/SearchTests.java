@@ -45,4 +45,19 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.waitForEmptyResultLabel();
         searchPageObject.assertNoResultOfSearch();
     }
+
+    @Test
+    public void testClearSearch(){
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clearSearchingField();
+    }
+
+    @Test
+    public void testSearchTitleTextCompare(){
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.assertTitleHasText("Search…");
+    }
 }

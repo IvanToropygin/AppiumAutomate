@@ -7,13 +7,15 @@ public class SearchPageObject extends MainPageObject {
     private static final String
     SEARCH_INIT_ELEMENT = "//*[contains(@text, 'Search Wikipedia')]",
     SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
+    SEARCH_FIELD = "org.wikipedia:id/search_src_text",
     SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id = 'org.wikipedia:id/page_list_item_container']" +
             "//*[contains(@text, '{SUBSTRING}')]",
     SEARCH_CANCEL_BTN = "org.wikipedia:id/search_close_btn",
     EMPTY_RESULT_LABEL = "//*[@text = 'No results found']",
+    SEARCH_RESULT_ITEM_TITLES = "org.wikipedia:id/page_list_item_title",
     SEARCH_RESULT_LOCATOR = "//*[@resource-id = 'org.wikipedia:id/search_results_list']//*[@resource-id = 'org.wikipedia:id/page_list_item_container']";
 
-    public  SearchPageObject(AppiumDriver driver){
+    public SearchPageObject(AppiumDriver driver){
         super(driver);
     }
 
@@ -58,12 +60,10 @@ public class SearchPageObject extends MainPageObject {
     }
 
     public int getAmountOfFoundArticles(){
-
         this.waitForElementPresent(
                 By.xpath(SEARCH_RESULT_LOCATOR),
                 "Cannot find request.",
                 15);
-
         return this.getAmountOfElements(By.xpath(SEARCH_RESULT_LOCATOR));
     }
 
@@ -71,7 +71,19 @@ public class SearchPageObject extends MainPageObject {
         this.waitForElementPresent(By.xpath(EMPTY_RESULT_LABEL), "Cannot find empty result label", 15);
     }
 
+    public void clearSearchingField(){
+        this.waitForElementAndClear(By.id(SEARCH_FIELD), "Field don't cleared", 5);
+    }
+
     public void assertNoResultOfSearch(){
         this.assertElementNotPresent(By.xpath(SEARCH_RESULT_LOCATOR), "Search result must be 0");
+    }
+
+    public void assertTitleHasText(String searchInputMustHaveText){
+        this.assertElementHasText(By.id(SEARCH_FIELD),searchInputMustHaveText, "Text in input field don't compare");
+    }
+
+    public void assertTitlesHasText(String titlesMustHaveText){
+        this.assertElementsHasText(By.id(SEARCH_RESULT_ITEM_TITLES), titlesMustHaveText);
     }
 }
